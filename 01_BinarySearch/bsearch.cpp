@@ -22,12 +22,27 @@ int binary_search(int target, int arr[], int arr_size){
   return -1;
 }
 
+int recursive_binary_search(int target, int arr[], int low, int high){
+  if (low<=high) {
+    int mid = (low + high)/2;
+    if (arr[mid]==target){
+      return mid;
+    } else if (target < arr[mid]){
+      recursive_binary_search(target, arr, low, mid-1);
+    } else {
+      recursive_binary_search(target, arr, mid+1, high);
+    }
+  } else {
+    return -1;
+  }
+}
+
 int main(){
   int target;
   std::cout << "What would you like to find?: ";
   std::cin >> target;
   int size = sizeof(rand_array)/sizeof(rand_array[0]);
-  int index = binary_search(target, rand_array, size);
+  int index = recursive_binary_search(target, rand_array, 0, size);
   if(index==-1){
     printf("The target was not found in the array.\n");
   } else {
