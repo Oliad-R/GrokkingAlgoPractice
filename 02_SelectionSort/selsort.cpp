@@ -29,7 +29,24 @@ public:
   void deleteNode(int);
 
   void displayList();
+
+  int getLength();
+  
+  int getData(int);
+
+  LinkedList selSort();
 };
+
+int LinkedList::getLength(){
+  Node* tempNode = head;
+  int length = 0;
+
+  while (tempNode != NULL){
+    length++;
+    tempNode = tempNode->next;
+  } 
+  return length;
+}
 
 void LinkedList::insertNode(int data){
   Node* newNode = new Node(data);
@@ -57,32 +74,33 @@ void LinkedList::deleteNode(int nodePos){
   }
 
   Node* tempNode = head;
-  Node* temp2 = NULL;
+  Node* temp2 = NULL; 
 
-  int length = 0;
-
-  //Check length to see if pos <= length
-
-  while (tempNode->next != NULL){
-    length++;
-    tempNode = tempNode->next;
-  }
-  length++;
+  int length = getLength();
 
   if (nodePos >= length){
     std::cout << "The index is too high for the given list length.\n";
+    delete tempNode;
     return;
   } else if (nodePos < 0) {
     std::cout << "Invalid index.\n";
+    delete tempNode;
     return;
+  } else if (nodePos == 0){
+    head = head->next;
+    return;
+  } else if (nodePos == 1){
+    temp2 = head;
+    tempNode = tempNode->next;
+    temp2->next = tempNode->next;
   } else {
-    tempNode = head;
-    while (nodePos-- > 1){
+    while (nodePos-- >= 1){
       temp2 = tempNode;
       tempNode = tempNode->next;
     }
     temp2->next = tempNode->next;
     delete tempNode;
+    return;
   }
 }
 
@@ -96,21 +114,58 @@ void LinkedList::displayList(){
   return;
 }
 
+LinkedList LinkedList::selSort(){
+  LinkedList tempList;
+  Node* tempNode;
+  int length = getLength();
+  int smallest, smallestIndex;
+
+  if (head == nullptr){
+    return tempList;
+  } else if (head == nullptr){
+    tempList.insertNode(head->data);
+    return tempList;
+  }
+
+  for (int i = 0; i < length; i++){
+    //find the smallest item / index
+    tempNode = head;
+    smallest = tempNode->data;
+    smallestIndex = i;
+    for (int j = i+1; j < length; j++){
+      tempNode = tempNode->next;
+      if (tempNode->data <= smallest){
+        smallest = tempNode->data;
+        smallestIndex = j;
+      }
+    }
+    //printf("SMALLEST: %d, SMALLEST INDEX: %d\n", smallest, smallestIndex);
+    tempList.insertNode(smallest);
+    deleteNode(smallestIndex-i);
+    //tempList.displayList();
+  }
+  
+  return tempList;
+}
+
 int main(){
-  LinkedList list;
+  LinkedList list, list2;
 
-  list.insertNode(1);
-  list.insertNode(2);
-  list.insertNode(3);
-  list.insertNode(4);
+  list.insertNode(100);
+  list.insertNode(23);
+  list.insertNode(391);
+  list.insertNode(92);
+  list.insertNode(81);
+  list.insertNode(53);
 
-  printf("The list is: \n");
+  printf("The unordered list is: \n");
   list.displayList();
 
-  list.deleteNode(2);
+  list2 = list.selSort();
+  //list.deleteNode(1);
 
-  printf("The list is: \n");
-  list.displayList();
+  printf("The sorted list is: \n");
+  list2.displayList();
 
   return 0;
 }
