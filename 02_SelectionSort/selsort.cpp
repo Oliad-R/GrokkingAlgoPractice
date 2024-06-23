@@ -31,8 +31,6 @@ public:
   void displayList();
 
   int getLength();
-  
-  int getData(int);
 
   LinkedList selSort();
 };
@@ -122,7 +120,7 @@ LinkedList LinkedList::selSort(){
 
   if (head == nullptr){
     return tempList;
-  } else if (head == nullptr){
+  } else if (head->next == nullptr){
     tempList.insertNode(head->data);
     return tempList;
   }
@@ -148,6 +146,29 @@ LinkedList LinkedList::selSort(){
   return tempList;
 }
 
+void displayArray(int arr[], int arr_size){
+  for (int i = 0; i < arr_size; i++){
+    printf("%d\n", arr[i]);
+  }
+}
+
+int* sortArray(int arr[], int arr_size){
+  int tempItem, smallest, smallestIndex;
+  for (int i = 0; i < arr_size; i++){
+    smallest = arr[i];
+    for (int j = i; j < arr_size; j++){
+      if (arr[j] <= smallest){
+        smallest = arr[j];
+        smallestIndex = j;
+      }
+    }
+    tempItem = arr[i];
+    arr[i] = arr[smallestIndex];
+    arr[smallestIndex] = tempItem;
+  }
+  return arr;
+}
+
 int main(){
   LinkedList list, list2;
 
@@ -166,6 +187,21 @@ int main(){
 
   printf("The sorted list is: \n");
   list2.displayList();
+
+  printf("----------\n");
+
+  int rand_array[6] = {100,23,391,92,81,53};
+
+  printf("The unordered array is: \n");
+
+  int arr_size = sizeof(rand_array)/sizeof(rand_array[0]);
+
+  displayArray(rand_array, arr_size);
+
+  printf("The sorted array is: \n");
+
+  displayArray(sortArray(rand_array, arr_size), arr_size);
+
 
   return 0;
 }
