@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <iostream>
+#include <vector>
 
 class Node {
 public:
@@ -153,7 +154,7 @@ void displayArray(int arr[], int arr_size){
 }
 
 int* sortArray(int arr[], int arr_size){
-  int tempItem, smallest, smallestIndex;
+  int smallest, smallestIndex;
   for (int i = 0; i < arr_size; i++){
     smallest = arr[i];
     for (int j = i; j < arr_size; j++){
@@ -162,9 +163,33 @@ int* sortArray(int arr[], int arr_size){
         smallestIndex = j;
       }
     }
-    tempItem = arr[i];
-    arr[i] = arr[smallestIndex];
-    arr[smallestIndex] = tempItem;
+    arr[smallestIndex] = arr[i];
+    arr[i] = smallest;
+  }
+  return arr;
+}
+
+void displayVector(std::vector<int> arr){
+  for (int i = 0; i < arr.size(); i++){
+    std::cout << arr[i] << std::endl;
+  }
+}
+
+std::vector<int> sortVector(std::vector<int> arr){
+  std::vector<int> newVect;
+  int smallest, smallestIndex;
+
+  for (int i = 0; i < arr.size(); i++){
+    smallest = arr[i];
+    smallestIndex = i;
+    for (int j = i; j < arr.size(); j++){
+      if (arr[j] <= smallest){
+        smallest = arr[j];
+        smallestIndex = j;
+      }
+    }
+    arr[smallestIndex] = arr[i];
+    arr[i] = smallest;
   }
   return arr;
 }
@@ -192,6 +217,8 @@ int main(){
 
   int rand_array[6] = {100,23,391,92,81,53};
 
+  std::vector<int> rand_vect = {100,23,391,92,81,53};
+
   printf("The unordered array is: \n");
 
   int arr_size = sizeof(rand_array)/sizeof(rand_array[0]);
@@ -202,6 +229,15 @@ int main(){
 
   displayArray(sortArray(rand_array, arr_size), arr_size);
 
+  printf("----------\n");
+
+  printf("The unordered vector is: \n");
+
+  displayVector(rand_vect);
+
+  printf("The sorted vector is: \n");
+
+  displayVector(sortVector(rand_vect));
 
   return 0;
 }
